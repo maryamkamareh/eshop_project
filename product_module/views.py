@@ -4,6 +4,7 @@ from .models import Product
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+
 def product_list(request):
     products = Product.objects.all()
     return render(request,  'product_module/product_list.html' , ({
