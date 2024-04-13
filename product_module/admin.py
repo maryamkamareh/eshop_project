@@ -11,3 +11,4 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ['rating', 'is_active']
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.ProductCategory)
+admin.site.register(models.ProductInformation)

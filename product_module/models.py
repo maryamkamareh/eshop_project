@@ -8,8 +8,16 @@ class ProductCategory(models.Model):
     url_field = models.CharField(max_length=300, verbose_name='عنوان در url')
     def __str__(self):
         return f"{self.title}-{self.url_field}"
+class ProductInformation(models.Model):
+    color = models.CharField(max_length=200, verbose_name='color')
+    size = models.CharField(max_length=200, verbose_name='size')
+    def __str__(self):
+        return f"{self.color} -{self.size}"
 class Product(models.Model):
     title = models.CharField(max_length=300)
+    product_information = models.OneToOneField('ProductInformation', on_delete=models.CASCADE,
+                                               related_name='product_information', verbose_name='informations',
+                                               null=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
     price = models.IntegerField()
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)] , default=0)
