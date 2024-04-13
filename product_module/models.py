@@ -8,7 +8,7 @@ class Product(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)] , default=0)
     short_description = models.CharField(max_length=350, null=True)
     is_active = models.BooleanField(default=False)
-    slug = models.SlugField(default="", null=False, db_index=True) #DB INDEX sorat va amalkarde behtar
+    slug = models.SlugField(default="", null=False, db_index=True, blank=True, editable=False) #DB INDEX sorat va amalkarde behtar
     def get_absolute_url(self):
         return reverse('product-detail',args=[self.slug])
 
