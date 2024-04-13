@@ -8,11 +8,17 @@ class ProductCategory(models.Model):
     url_field = models.CharField(max_length=300, verbose_name='عنوان در url')
     def __str__(self):
         return f"{self.title}-{self.url_field}"
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural= 'categories'
 class ProductInformation(models.Model):
     color = models.CharField(max_length=200, verbose_name='color')
     size = models.CharField(max_length=200, verbose_name='size')
     def __str__(self):
         return f"{self.color} -{self.size}"
+    class Meta:
+        verbose_name = 'Information'
+        verbose_name_plural= 'Informations'
 class Product(models.Model):
     title = models.CharField(max_length=300)
     product_information = models.OneToOneField('ProductInformation', on_delete=models.CASCADE,
@@ -33,3 +39,6 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.price})"
+    class Meta:
+        verbose_name = 'product'
+        verbose_name_plural= 'products'
