@@ -7,7 +7,7 @@ class ProductCategory(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     url_field = models.CharField(max_length=300, verbose_name='عنوان در url')
     def __str__(self):
-        return self.title
+        return f"{self.title}-{self.url_field}"
 class Product(models.Model):
     title = models.CharField(max_length=300)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
