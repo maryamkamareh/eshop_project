@@ -3,6 +3,13 @@ from django.core.validators import MinValueValidator , MaxValueValidator
 from django.template.defaultfilters import title
 from django.urls import reverse
 from django.utils.text import slugify
+class ProductTag(models.Model):
+    tag = models.CharField(max_length=300, verbose_name='title')
+    def __str__(self):
+        return self.tag
+    class Meta:
+        verbose_name = 'product tag'
+        verbose_name_plural = 'product tags'
 class ProductCategory(models.Model):
     title = models.CharField(max_length=300, verbose_name='عنوان')
     url_field = models.CharField(max_length=300, verbose_name='عنوان در url')
@@ -25,6 +32,7 @@ class Product(models.Model):
                                                related_name='product_information', verbose_name='informations',
                                                null=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
+    product_tags = models.ManyToManyField(ProductTag, verbose_name='product tags')
     price = models.IntegerField()
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)] , default=0)
     short_description = models.CharField(max_length=350, null=True)
