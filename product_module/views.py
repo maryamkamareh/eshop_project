@@ -9,11 +9,10 @@ def product_list(request):
     products = Product.objects.all().order_by('title') # sort kardan barax - az ziyad -price
     #Product.objects.filter(category__url_field='mobile')
     nuumber_of_product = products.count()
-    avg_rating = products.aggregate(Avg("rating"), Min("price"), Avg("price"))
+    avg_rating = products.aggregate(Min("price"), Avg("price"))
     return render(request,  'product_module/product_list.html' , ({
         'products' : products,
         'total_number_of_products': nuumber_of_product,
-        'average_rating': avg_rating
     }))
 def product_detail(request, slug):
     # try:
