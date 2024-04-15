@@ -6,6 +6,7 @@ def index_page(request):
 
 def contact_page(request):
     return render(request, 'home_module/contact_page.html')
+
 def site_header_component(request):
     contex = {
         'link' : 'آموزش جنگو'
