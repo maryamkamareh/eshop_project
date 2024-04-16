@@ -14,13 +14,19 @@ from  django.db.models import Avg, Min
 #     return render(request,  'product_module/product_list.html' , ({
 #         'products' : products,
 #     }))
-class ProductListView(TemplateView):
+class ProductListView(ListView):
     template_name = 'product_module/product_list.html'
-    def get_context_data(self, **kwargs):
-        products = Product.objects.all().order_by('title')[:5]
-        contex = super(ProductListView, self).get_context_data()
-        contex['products'] = products
-        return contex
+    model = Product
+    context_object_name = 'products'
+    def get_queryset(self):
+        base_query = super(ProductListView, self).get_queryset()
+        data = base_query.filter(is_active = True)
+        return data
+    # def get_context_data(self, **kwargs):
+    #     products = Product.objects.all().order_by('title')[:5]
+    #     contex = super(ProductListView, self).get_context_data()
+    #     contex['products'] = products
+    #     return contex
 # def product_detail(request, slug):
 #     product = get_object_or_404(Product, slug=slug) # = try except
 #     return render(request, 'product_module/product_details.html', {
