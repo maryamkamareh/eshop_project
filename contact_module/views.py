@@ -3,6 +3,8 @@ from .forms import ContactUsForms
 # Create your views here.
 from django.urls import reverse
 
+from .models import ContactUs
+
 
 def contact_us_page(request):
     # if request.method == 'POST':
@@ -15,6 +17,13 @@ def contact_us_page(request):
         contact_form = ContactUsForms(request.POST)
         if contact_form.is_valid(): #checl the format of input
             print(contact_form.cleaned_data)
+            contact = ContactUs(
+                title=contact_form.cleaned_data.get('subject'),
+                full_name=contact_form.cleaned_data.get('full_name'),
+                email=contact_form.cleaned_data.get('email'),
+                message=contact_form.cleaned_data.get('text')
+            )
+            contact.save()
             return redirect('home_page')
     else:
         contact_form = ContactUsForms()

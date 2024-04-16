@@ -14,6 +14,16 @@
 	    				<div class="status alert alert-success" style="display: none"></div>
 				    	<form id="main-contact-form" class="contact-form row" method="post" action={% url 'contact_us_form' %}>
 				            {% csrf_token %}
+
+{#                               {% for field in contact_form %}#}
+{#                                   <div class="col-md-12 form-group">#}
+{#                                        {{ field.label_tag }}#}
+{#                                        {{ field }}#}
+{#                                        {{ field.errors }}#}
+{#                                    </div>#}
+{#                               {% endfor %}#}
+                       
+
                             <div class="col-md-6 form-group {% if contact_form.full_name.errors %}{% endif %}">
                                 {{ contact_form.full_name.label_tag }}
                                 {{ contact_form.full_name }}
