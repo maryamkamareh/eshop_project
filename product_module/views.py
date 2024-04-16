@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template.context_processors import request
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView
+from django.views.generic import ListView,DetailView
 
 from .models import Product, ProductCategory
 from django.http import Http404
@@ -33,11 +33,12 @@ class ProductListView(ListView):
 #         'product': product
 #     })
 
-class ProductDetaiView(TemplateView):
+class ProductDetaiView(DetailView):
     template_name = 'product_module/product_details.html'
-    def get_context_data(self, **kwargs):
-        slug = kwargs['slug']
-        product = get_object_or_404(Product, slug=slug)
-        contex = super(ProductDetaiView, self).get_context_data()
-        contex['product'] = product
-        return contex
+    model = Product
+    # def get_context_data(self, **kwargs):
+    #     slug = kwargs['slug']
+    #     product = get_object_or_404(Product, slug=slug)
+    #     contex = super(ProductDetaiView, self).get_context_data()
+    #     contex['product'] = product
+    #     return contex
