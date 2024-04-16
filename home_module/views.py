@@ -1,11 +1,24 @@
 from django.shortcuts import render
 
 # Create your views here.
-def index_page(request):
-    return render(request, 'home_module/index_page.html')
+from django.views import View
+from django.views.generic.base import TemplateView
 
-def contact_page(request):
-    return render(request, 'home_module/contact_page.html')
+# def index_page(request):
+#     return render(request, 'home_module/index_page.html')
+
+# class HomeView(View):
+#     def get(self, request):
+#         contex = {}
+#         return render(request, 'home_module/index_page.html', contex)
+
+class HomeView(TemplateView): # in va 2 taye bala ye kar mikonan
+    template_name = 'home_module/index_page.html'
+    def get_context_data(self, **kwargs):
+        contex = super().get_context_data(**kwargs)
+        contex['data'] = 'this is data in home page'
+        return contex
+
 
 def site_header_component(request):
     contex = {
