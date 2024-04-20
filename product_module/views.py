@@ -7,6 +7,8 @@ class ProductListView(ListView):
     template_name = 'product_module/product_list.html'
     model = Product
     context_object_name = 'products'
+    ordering = ['-price'] # moratab sazi az kamtarin gheymat
+    paginate_by = 1 # show
     def get_queryset(self):
         query = super(ProductListView, self).get_queryset()
         category_name = self.kwargs.get('cat')
