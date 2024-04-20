@@ -55,11 +55,17 @@
 									</span>
 									<span>
 										<label>تعداد :</label>
-										<input type="text" value="3" class="search_box">
+										<input type="button" value="3" class="search_box">
 										<button type="button" class="btn btn-fefault cart">
 											<i class="fa fa-shopping-cart"></i>
-											افـزودن به سبـد خریـد
+                                            <a href="">افـزودن به سبـد خریـد</a>
 										</button>
+{#                                            <ul>#}
+{#                                                {% for item in order_detail %}#}
+{#                                                    <li>{{ item.product.name }} - Quantity: {{ item.quantity }} - Price: {{ item.product.price }}</li>#}
+{#                                                {% endfor %}#}
+{#                                            </ul>#}
+                                            <p>Total Price: {{ total_price }}</p>
 									</span>
 								</div>
 								<div>

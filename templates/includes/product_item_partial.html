@@ -2,16 +2,21 @@
     <div class="product-image-wrapper">
         <div class="single-products">
             <div class="productinfo text-center">
-                <img src="/stattic/images/shop/product.jpg" alt="">
+                {% if product.image %}
+                     <img src="{{ product.iamge.url }}" alt="">
+                {% else %}
+                    <img src="/stattic/images/shop/product.jpg" alt="">
+                {% endif %}
+
                 <h2>{{ product.price }} تومان</h2>
                 <p>{{ product.title }}</p>
-                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
+                <a href="{% url 'add_product_to_order' product_id=product.id  %}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
             </div>
             <div class="product-overlay">
                 <div class="overlay-content">
                     <h2>{{ product.price }}تومان</h2>
                     <p>{{ product.title }}</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
+                    <a href="{{ product.id.get_absolute_url }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
                 </div>
             </div>
         </div>

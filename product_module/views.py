@@ -1,44 +1,26 @@
+from django.http import HttpRequest
 from django.shortcuts import render
-from django.template.context_processors import request
-from django.views.generic.base import TemplateView
-from django.views.generic import ListView,DetailView
-
+from django.views.generic import ListView, DetailView
 from .models import Product, ProductCategory
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-from  django.db.models import Avg, Min
 
-# def product_list(request):
-#     products = Product.objects.all().order_by('title')[:5] # sort kardan barax - az ziyad -price
-#     #[:5] 5 taye akhar
-#     return render(request,  'product_module/product_list.html' , ({
-#         'products' : products,
-#     }))
 class ProductListView(ListView):
     template_name = 'product_module/product_list.html'
     model = Product
     context_object_name = 'products'
     def get_queryset(self):
-        base_query = super(ProductListView, self).get_queryset()
-        data = base_query.filter(is_active = True)
-        return data
-    # def get_context_data(self, **kwargs):
-    #     products = Product.objects.all().order_by('title')[:5]
-    #     contex = super(ProductListView, self).get_context_data()
-    #     contex['products'] = products
-    #     return contex
-# def product_detail(request, slug):
-#     product = get_object_or_404(Product, slug=slug) # = try except
-#     return render(request, 'product_module/product_details.html', {
-#         'product': product
-#     })
+        query = super(ProductListView, self).get_queryset()
+        category_name = self.kwargs.get('cat')
+        if category_name is not None:
+            query = query.filter(category__url__title__iexact=category_name)
+        return query
 
 class ProductDetaiView(DetailView):
     template_name = 'product_module/product_details.html'
     model = Product
-    # def get_context_data(self, **kwargs):
-    #     slug = kwargs['slug']
-    #     product = get_object_or_404(Product, slug=slug)
-    #     contex = super(ProductDetaiView, self).get_context_data()
-    #     contex['product'] = product
-    #     return contex
+
+def product_categoreis_component(request: HttpRequest):
+    product_categories = ProductCategory.objects.all()
+    context = {
+        'categories': product_categories
+    }
+    return render(request, 'product_module/component/product_categoreis_component.html', context)

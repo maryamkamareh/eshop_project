@@ -1,0 +1,11 @@
+{% extends 'shared/_layout.html' %}
+{% block title %}orders{% endblock %}
+{% block content %}
+<h1>Cart Detail</h1>
+<ul>
+  {% for product in products %}
+    <li>{{ product.name }} - Price: ${{ product.price }}</li>
+  {% endfor %}
+</ul>
+<h3>Total Price: ${{ total_price }}</h3>
+{% endblock %}
