@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home_module',
     'contact_module',
     'order_module',
+    'account_module',
     'django_render_partial',
 ]
 
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'eshop_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+AUTH_USER_MODEL = 'account_module.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
