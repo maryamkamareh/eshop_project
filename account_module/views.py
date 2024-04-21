@@ -1,13 +1,12 @@
 from django.http import Http404, HttpRequest
 from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model, login
-# Create your views here.
+from django.contrib.auth import login, logout
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views import View
-
 from account_module.forms import RegisterForm, LoginForm, ForgotForm, ResetPasswordForm
 from .models import User
+from utils.email_service import send_email
 
 
 class RegisterView(View):
@@ -33,6 +32,7 @@ class RegisterView(View):
                                 username=user_email)
                 new_user.set_password(user_password)
                 new_user.save()
+                send_email('فعالسازی حساب کاربری', new_user.email, {'user': new_user}, 'emails/active_account.html')
                 return redirect(reverse('login_page'))
 
         context = {
