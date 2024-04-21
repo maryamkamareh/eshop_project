@@ -132,3 +132,8 @@ class ResetPasswordView(View):
             'user': user
         }
         return render(request, 'account_module/reset_password.html', context)
+
+class LogOutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect(reverse('login_page'))
