@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views import View
 
-from account_module.forms import RegisterForm, LoginForm
+from account_module.forms import RegisterForm, LoginForm, ForgotForm, ResetPasswordForm
 from .models import User
 
 
@@ -39,7 +39,6 @@ class RegisterView(View):
             'register_form': register_form
         }
         return render(request,'account_module/register.html', context)
-
 
 class LoginView(View):
     def get(self, request):
@@ -85,8 +84,32 @@ class ActivateAccountView(View):
                 pass
         raise Http404
 
+class ForgotPasswordView(View):
+    def get(self, request: HttpRequest):
+        forget_pass_form = ForgotForm(request.POST)
+        context = {
+            'forget_pass_form': forget_pass_form
+        }
+        return render(request, 'account_module/forgot_password.html', context)
+    def post(self, request: HttpRequest):
+        forget_pass_form = ForgotForm(request.POST)
+        if forget_pass_form.is_valid():
+            user_email = forget_pass_form.cleaned_data.get('email')
+            user: User = User.objects.filter(email__iexact=user_email).first()
+            if user is not None:
+                pass
+        context = {
+            'forget_pass_form': forget_pass_form
+        }
+        return render(request, 'account_module/forgot_password.html', context)
 
-
-
-
-
+class ResetPasswordView(View):
+    def get(self, request: HttpRequest, active_code):
+        user: User = User.objects.filter(email_active_code__iexact=active_code).first()
+        if user is None:
+            return redirect(reverse('login_page'))
+        reset_pass_form = ResetPasswordForm()
+        context = {
+            'reset_pass_form': reset_pass_form
+        }
+        return render(request, 'account_module/reset_password.html', context)
