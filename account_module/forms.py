@@ -7,14 +7,17 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(
         label='ایمیل',
         widget=forms.EmailInput(),
-        # validators=[
-        #     validators.MaxValueValidator(100),
-        #     validators.EmailValidator,
-        # ]
+        validators=[
+            validators.MaxLengthValidator(100),
+            validators.EmailValidator,
+        ]
     )
     password = forms.CharField(
         label='کلمه عبور ',
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        validators=[
+            validators.MaxLengthValidator(100),
+        ]
     )
     confirm_password = forms.CharField(
         label='تکرار کلمه عبور',
@@ -26,3 +29,21 @@ class RegisterForm(forms.Form):
         if password == confirm_password:
             return confirm_password
         raise ValidationError('کلمه عبور با تکرار آن مغایرت دارد')
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        label='ایمیل',
+        widget=forms.EmailInput(),
+        validators=[
+            validators.MaxLengthValidator(100),
+            validators.EmailValidator,
+        ]
+    )
+    password = forms.CharField(
+        label='کلمه عبور ',
+        widget=forms.PasswordInput(),
+        validators=[
+            validators.MaxLengthValidator(100)
+        ]
+    )
