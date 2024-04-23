@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'order_module',
     'account_module',
     'site_module',
+    'article_module',
     'django_render_partial',
 ]
 
