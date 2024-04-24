@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+from account_module.models import User
+
+
 class ArticleCategory(models.Model):
     parent = models.ForeignKey('ArticleCategory', null=True, blank=True, on_delete=models.CASCADE, verbose_name='دسته بندی والد')
     title = models.CharField(max_length=200, verbose_name='عنوان دسته بندی')
@@ -21,7 +24,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='متن مقاله')
     is_active = models.BooleanField(default=True, verbose_name='فعال/ غیر فعال')
     selected_categories = models.ManyToManyField(ArticleCategory, verbose_name='دسته بندی ها')
-
+    author = models.ForeignKey(User, editable=False, on_delete=models.CASCADE, null=True, verbose_name='نویسنده')
     def __str__(self):
         return self.title
     class Meta:
