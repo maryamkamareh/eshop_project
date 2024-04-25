@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import View
 # Create your views here.
 from django.views.generic import ListView, DetailView
-from article_module.models import Article, ArticleCategory
+from article_module.models import Article, ArticleCategory, ArticleComment
 from jalali_date import datetime2jalali, date2jalali
 
 class ArticlesLIstViews(ListView):
@@ -30,6 +30,11 @@ class ArticleDetailView(DetailView):
         query = super(ArticleDetailView, self).get_queryset()
         query = query.filter(is_active=True)
         return query
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetailView, self).get_context_data()
+        article: Article = kwargs.get('object')
+        context['comments'] =ArticleComment.objects.filter(article_id=article.id, parent=None).prefetch_related('articlecomment_set')
+        return context
 
 
 def article_categories_component(request: HttpRequest):
