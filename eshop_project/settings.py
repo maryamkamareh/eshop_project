@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account_module',
     'site_module',
     'article_module',
+    'user_panel_module',
     'django_render_partial',
 ]
 
