@@ -14,6 +14,7 @@ class ProductCategory(models.Model):
 
 class ProductBrand(models.Model):
     title = models.CharField(max_length=300, db_index=True,  verbose_name='نام برند')
+    url_title = models.CharField(max_length=300, db_index=True, verbose_name='نام در url')
     is_active = models.BooleanField(verbose_name='فعال/غیرفعال')
     class Meta:
         verbose_name = 'برند'
@@ -37,7 +38,7 @@ class Product(models.Model):
     is_delete = models.BooleanField(verbose_name='حذف شده/ حذف نشده')
 
     def get_absolute_url(self):
-        return reverse('product-detail',args=[self.slug])
+        return reverse('product-detail', args=[self.slug])
 
     def save(self, *args, **kwargs): # overwrite save
         #self.slug = slugify(self.title) # samsung galaxy s 20 +> samsung-galexy-s-20

@@ -18,7 +18,6 @@ class ArticlesLIstViews(ListView):
         query = super(ArticlesLIstViews, self).get_queryset()
         query = query.filter(is_active=True)
         category_name = self.kwargs.get('category') #digita ya mobile , ...
-
         if category_name is not None:
             query = query.filter(selected_categories__url_title__iexact=category_name)
         return query
@@ -38,7 +37,7 @@ class ArticleDetailView(DetailView):
 
 
 def article_categories_component(request: HttpRequest):
-    article_main_category = ArticleCategory.objects.filter(is_active=True, parent_id=None)
+    article_main_category = ArticleCategory.objects.prefetch_related('articlecategory_set').filter(is_active=True, parent_id=None)
     context = {
         'main_categories' : article_main_category
     }
