@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+
+from product_module.models import Product
 from site_module.models import SiteSetting, FooterLinkBox, Slider
+from utils.convertors import group_list
 
 
 class HomeView(TemplateView): # in va 2 taye bala ye kar mikonan
@@ -8,7 +11,8 @@ class HomeView(TemplateView): # in va 2 taye bala ye kar mikonan
     def get_context_data(self, **kwargs):
         contex = super().get_context_data(**kwargs)
         contex['sliders'] = Slider.objects.filter(is_active=True)
-
+        latest_products = Product.objects.filter(is_active=True, is_delete=False).order_by('-id')[0:12]
+        contex['latest_products'] = group_list(latest_products)
         return contex
 
 def site_header_component(request):

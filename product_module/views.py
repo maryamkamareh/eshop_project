@@ -1,7 +1,10 @@
 from django.db.models import Count
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import ListView, DetailView
+
+from site_module.models import SiteBanner
 from .models import Product, ProductCategory, ProductBrand
 
 
@@ -20,6 +23,7 @@ class ProductListView(ListView):
         context['db_max_price'] = db_max_price
         context['start_price'] = self.request.GET.get('start_price') or 0
         context['end_price'] = self.request.GET.get('end_price') or 1000000
+        context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_list)
         return context
 
     def get_queryset(self):
@@ -42,6 +46,15 @@ class ProductListView(ListView):
 class ProductDetaiView(DetailView):
     template_name = 'product_module/product_details.html'
     model = Product
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        loaded_product = self.object
+        request = self.request
+        favorite_product_id = request.session.get("product_favorites")
+        context['is_favorite'] = favorite_product_id == str(loaded_product.id)
+        context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_detail)
+        return context
+
 
 def product_categoreis_component(request: HttpRequest):
     product_categories = ProductCategory.objects.filter(is_active=True, is_delete=False)
@@ -56,3 +69,9 @@ def product_brands_component(request: HttpRequest):
         'brands' : product_brands
     }
     return render(request, 'product_module/component/product_brands_component.html', context)
+class AddProductFavorite(View):
+    def post(self, request):
+        product_id = request.POST["product_id"]
+        product = Product.objects.get(pk=product_id)
+        request.session["product_favorites"] = product_id
+        return redirect(product.get_absolute_url())
