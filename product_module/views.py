@@ -5,31 +5,33 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 
 from site_module.models import SiteBanner
-from .models import Product, ProductCategory, ProductBrand
+from utils.http_service import get_client_ip
+from .models import Product, ProductCategory, ProductBrand, ProductVisit
 
 
 class ProductListView(ListView):
     template_name = 'product_module/product_list.html'
     model = Product
     context_object_name = 'products'
-    ordering = ['-price'] # moratab sazi az kamtarin gheymat
-    paginate_by = 1 # show
+    ordering = ['-price']  # moratab sazi az kamtarin gheymat
+    paginate_by = 1  # show
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductListView, self).get_context_data()
         query = Product.objects.all()
         product: Product = query.order_by('-price').first()
-        db_max_price =product.price if product is not None else 0
+        db_max_price = product.price if product is not None else 0
         context['db_max_price'] = db_max_price
         context['start_price'] = self.request.GET.get('start_price') or 0
         context['end_price'] = self.request.GET.get('end_price') or 1000000
-        context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_list)
+        context['banners'] = SiteBanner.objects.filter(is_active=True,
+                                                       position__iexact=SiteBanner.SiteBannerPositions.product_list)
         return context
 
     def get_queryset(self):
         query = super(ProductListView, self).get_queryset()
         category_name = self.kwargs.get('cat')
-        brand_name =self.kwargs.get('brand')
+        brand_name = self.kwargs.get('brand')
         request: HttpRequest = self.request
         start_price = request.GET.get('start_price')
         end_price = request.GET.get('end_price')
@@ -43,16 +45,27 @@ class ProductListView(ListView):
             query = query.filter(category__url_field__iexact=category_name)
         return query
 
+
 class ProductDetaiView(DetailView):
     template_name = 'product_module/product_details.html'
     model = Product
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         loaded_product = self.object
         request = self.request
         favorite_product_id = request.session.get("product_favorites")
         context['is_favorite'] = favorite_product_id == str(loaded_product.id)
-        context['banners'] = SiteBanner.objects.filter(is_active=True, position__iexact=SiteBanner.SiteBannerPositions.product_detail)
+        context['banners'] = SiteBanner.objects.filter(is_active=True,
+                                                       position__iexact=SiteBanner.SiteBannerPositions.product_detail)
+        user_ip = get_client_ip(self.request)
+        user_id = None
+        if self.request.user.is_authenticated:
+            user_id = self.request.user.id
+        has_been_visited = ProductVisit.objects.filter(ip__iexact=user_ip, product_id=loaded_product.id).exists()
+        if not has_been_visited:
+            new_visit = ProductVisit(ip=user_ip, user_id=user_id, product_id=loaded_product.id)
+            new_visit.save()
         return context
 
 
@@ -63,12 +76,15 @@ def product_categoreis_component(request: HttpRequest):
     }
     return render(request, 'product_module/component/product_categoreis_component.html', context)
 
+
 def product_brands_component(request: HttpRequest):
     product_brands = ProductBrand.objects.annotate(products_count=Count('product')).filter(is_active=True)
-    context= {
-        'brands' : product_brands
+    context = {
+        'brands': product_brands
     }
     return render(request, 'product_module/component/product_brands_component.html', context)
+
+
 class AddProductFavorite(View):
     def post(self, request):
         product_id = request.POST["product_id"]

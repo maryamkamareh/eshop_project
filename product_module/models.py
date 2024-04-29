@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from  account_module.models import User
 
 class ProductCategory(models.Model):
     title = models.CharField(max_length=300, db_index=True, verbose_name='عنوان')
@@ -58,3 +59,13 @@ class ProductTag(models.Model):
     class Meta:
         verbose_name = 'تگ محصول'
         verbose_name_plural = 'تگ های محصول'
+
+class ProductVisit(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='محصول') # visit baraye kodum mahsule
+    ip = models.CharField(max_length=30, verbose_name='ای پی کاربر')
+    user = models.ForeignKey(User, null= True, on_delete=models.CASCADE, blank=True, verbose_name='کاربر')
+    def __str__(self):
+        return f'{self.product.title}/{self.ip}'
+    class Meta:
+        verbose_name = 'بازدید محصول'
+        verbose_name_plural = 'بازدیدهای محصول'
