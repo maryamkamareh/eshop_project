@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'site_module',
     'article_module',
     'user_panel_module',
+    'polls',
     'django_render_partial',
 ]
 
