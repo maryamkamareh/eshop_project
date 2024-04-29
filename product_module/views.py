@@ -1,7 +1,6 @@
 from django.db.models import Count
 from django.http import HttpRequest
-from django.shortcuts import render, redirect
-from django.views import View
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
 from site_module.models import SiteBanner
@@ -84,10 +83,9 @@ def product_brands_component(request: HttpRequest):
     }
     return render(request, 'product_module/component/product_brands_component.html', context)
 
-
-class AddProductFavorite(View):
-    def post(self, request):
-        product_id = request.POST["product_id"]
-        product = Product.objects.get(pk=product_id)
-        request.session["product_favorites"] = product_id
-        return redirect(product.get_absolute_url())
+# class AddProductFavorite(View):
+#     def post(self, request):
+#         product_id = request.POST["product_id"]
+#         product = Product.objects.get(pk=product_id)
+#         request.session["product_favorites"] = product_id
+#         return redirect(product.get_absolute_url())
