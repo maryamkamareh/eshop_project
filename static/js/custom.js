@@ -37,3 +37,22 @@ function fillPage(page) {
     $('#page').val(page);
     $('#filter_form').submit();
 }
+
+function addProductToOrder(productId) {
+    const productCount = $('#product-count').val();
+    $.get('/order/add-to-order?product_id=' + productId + '&count=' + productCount).then(res => {
+        if (res.status === 'success') {
+            Swal.fire({
+                title: "اعلان?",
+                text: "محصول مورد نظر با موفقیت به سبد خرید اضافه شد",
+                icon: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "باشه ممنون"
+            }).then((result) => {
+            });
+        }
+    });
+}
+
