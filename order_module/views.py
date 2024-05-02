@@ -25,13 +25,19 @@ def add_product_to_order(request: HttpRequest):
                 new_detail.save()
 
             return JsonResponse({
-                'status': 'success'
+                'status': 'success',
+                'text': 'محصول مورد نظر به سبد خرید اضافه شد',
+                'condirm_button_text': 'باشه ممنونم'
             })
         else:
             return JsonResponse({
-                'status': 'not_found'
+                'status': 'not_found',
+                'text': 'محصول مورد نظر یافت نشد',
+                'condirm_button_text': 'مرسییییی'
             })
     else:
         return JsonResponse({
-            'status': 'not_auth'
-        })
+            'status': 'not_auth',
+            'text': 'اول وارد شوید',
+            'condirm_button_text' : 'باشههه'
+    })

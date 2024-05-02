@@ -43,7 +43,7 @@ function addProductToOrder(productId) {
     $.get('/order/add-to-order?product_id=' + productId + '&count=' + productCount).then(res => {
         if (res.status === 'success') {
             Swal.fire({
-                title: "اعلان?",
+                title: "اعلان",
                 text: "محصول مورد نظر با موفقیت به سبد خرید اضافه شد",
                 icon: "success",
                 showCancelButton: false,
